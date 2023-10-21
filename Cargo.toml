@@ -1,6 +1,5 @@
 [package]
 name = "lice"
-name = "lice"
 description = "Dead simple, minimal SPDX License generator library written in Rust."
 version = "0.0.1"
 edition = "2021"
