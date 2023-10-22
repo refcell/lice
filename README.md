@@ -45,12 +45,35 @@ Install `lice` with cargo.
 cargo add lice
 ```
 
-Alternatively, build it from source.
+A short example to query for the `MIT` License is shown below.
 
-```ignore,sh,no_run
-git clone git@github.com:refcell/lice.git && cd lice
-cargo build --release
+```rust
+use anyhow::Result;
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    let license = lice::SPDX::license("MIT").await?;
+    assert_eq!(license.license_id, "MIT");
+    Ok(())    
+}
 ```
+
+The [lice::SPDX](./src/spdx.rs) client also exposes wrapper methods
+around the [Licenses type](./src/types.rs). An example of "fuzzy"
+searching for a license is shown below.
+
+```rust
+use anyhow::Result;
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    let license = lice::SPDX::fuzzy_find("MIT").await?;
+    let license = license.ok_or(anyhow::anyhow!("no license!"))?;
+    assert_eq!(license.license_id, "MIT");
+    Ok(())    
+}
+```
+
 
 ## Contributing
 

@@ -1,15 +1,23 @@
 use serde::Deserialize;
 
-/// Licenses Response Type.
+/// Cross Reference.
 #[derive(Deserialize, PartialEq, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct Licenses {
-    /// License list version.
-    pub license_list_version: String,
-    /// List of licenses.
-    pub licenses: Vec<License>,
-    /// The release date.
-    pub release_date: String,
+pub struct CrossRef {
+    /// The match.
+    pub r#match: String,
+    /// The URL.
+    pub url: String,
+    /// Whether or not the URL is valid.
+    pub is_valid: bool,
+    /// Whether or not the URL is live.
+    pub is_live: bool,
+    /// The timestamp.
+    pub timestamp: String,
+    /// Whether or not the URL is a wayback link.
+    pub is_way_back_link: bool,
+    /// The order.
+    pub order: u32,
 }
 
 /// The License Object.
@@ -61,24 +69,71 @@ pub struct License {
     pub cross_ref: Option<Vec<CrossRef>>,
 }
 
-/// Cross Reference.
-#[derive(Deserialize, PartialEq, Debug, Clone)]
+/// Licenses Response Type.
+#[derive(Default, Deserialize, PartialEq, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct CrossRef {
-    /// The match.
-    pub r#match: String,
-    /// The URL.
-    pub url: String,
-    /// Whether or not the URL is valid.
-    pub is_valid: bool,
-    /// Whether or not the URL is live.
-    pub is_live: bool,
-    /// The timestamp.
-    pub timestamp: String,
-    /// Whether or not the URL is a wayback link.
-    pub is_way_back_link: bool,
-    /// The order.
-    pub order: u32,
+pub struct Licenses {
+    /// License list version.
+    pub license_list_version: String,
+    /// List of licenses.
+    pub licenses: Vec<License>,
+    /// The release date.
+    pub release_date: String,
+}
+
+impl Licenses {
+    /// Match a license by ID fuzzily.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use lice::types::Licenses;
+    /// let licenses = Licenses::default();
+    /// let license = licenses.match_license("mit");
+    /// assert_eq!(license, None);
+    /// ```
+    pub fn match_license(&self, id: &str) -> Option<License> {
+        self.match_licenses(id, None).get(0).cloned()
+    }
+
+    /// Matches a license by ID fuzzily.
+    pub fn match_licenses(&self, id: &str, n: Option<usize>) -> Vec<License> {
+        let mut similar: Vec<_> = self
+            .licenses
+            .iter()
+            .map(|license| {
+                (
+                    strsim::jaro_winkler(
+                        &license.license_id.clone().to_lowercase(),
+                        &id.to_lowercase(),
+                    ),
+                    license,
+                )
+            })
+            .collect();
+        similar.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap());
+        let count = n.unwrap_or(similar.len());
+        similar[0..count]
+            .iter()
+            .map(|(_, license)| license.to_owned().clone())
+            .collect()
+    }
+
+    /// Returns a license by ID.
+    /// If no license is found, returns `None`.
+    pub fn get_license(&self, id: &str) -> Option<&License> {
+        self.licenses
+            .iter()
+            .find(|license| license.license_id == id)
+    }
+
+    /// Returns a license by ID case insensitively.
+    /// If no license is found, returns `None`.
+    pub fn get_license_case_insensitive(&self, id: &str) -> Option<&License> {
+        self.licenses
+            .iter()
+            .find(|&license| license.license_id.to_lowercase() == id.to_lowercase())
+    }
 }
 
 #[cfg(test)]

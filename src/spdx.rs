@@ -43,6 +43,26 @@ impl SPDX {
             .await
             .map_err(|e| e.into())
     }
+
+    /// Fuzzy search for a license by ID, e.g. `MIT`.
+    ///
+    /// # Example
+    /// ```rust
+    /// use anyhow::Result;
+    /// use lice::spdx;
+    ///
+    /// #[tokio::main]
+    /// async fn main() -> Result<()> {
+    ///   let license = spdx::SPDX::fuzzy_find("mit").await?;
+    ///   let license = license.ok_or(anyhow::anyhow!("no license!"))?;
+    ///   assert_eq!(license.license_id, "MIT");
+    ///   Ok(())
+    /// }
+    /// ```
+    pub async fn fuzzy_find(id: &str) -> Result<Option<crate::types::License>> {
+        let licenses = Self::licenses().await?;
+        Ok(licenses.match_license(id))
+    }
 }
 
 #[cfg(test)]
