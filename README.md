@@ -28,6 +28,7 @@
 | [Reference][Docs-rs]
 | [Contributing](#contributing)
 | [License](#license)
+| [Attribution](#attribution)
 
 ## What is lice?
 
@@ -53,13 +54,25 @@ cargo build --release
 
 ## Contributing
 
-All contributions are welcome! Experimentation is highly encouraged and new issues are welcome.
+All contributions are welcome! Experimentation is highly encouraged
+and new issues are welcome.
 
 ## Troubleshooting & Bug Reports
 
 Please check existing issues for similar bugs or
 [open an issue](https://github.com/refcell/lice/issues/new)
 if no relevant issue already exists.
+
+## Attribution
+
+Much of this work is based off of [lic][lic-repo], an spdx license
+generator binary that isn't extensible as a library. The adapted
+[`lice`][crates.io] crate extends the SPDX "API" to
+provide more verbose license fetching methods. Big h/t to the
+creators of [lic][lic-repo] especially [SigureMo][sig-mo]
+
+[sig-mo]: https://github.com/SigureMo
+[lic-repo]: https://github.com/ShigureLab/lic/tree/main
 
 ## License
 

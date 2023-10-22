@@ -1,14 +1,19 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+#![doc = include_str!("../README.md")]
+#![warn(
+    missing_debug_implementations,
+    missing_docs,
+    unreachable_pub,
+    rustdoc::all
+)]
+#![deny(unused_must_use, rust_2018_idioms)]
+#![cfg_attr(docsrs, feature(doc_cfg, doc_auto_cfg))]
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+/// Core license types.
+pub mod types;
+/// Re-exported core license types from the [`types`] module.
+pub use types::*;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+/// SPDX API client.
+pub mod spdx;
+/// Re-exported SPDX API client from the [`spdx`] module.
+pub use spdx::*;
