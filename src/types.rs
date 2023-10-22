@@ -100,7 +100,7 @@ impl Licenses {
     /// assert_eq!(license, None);
     /// ```
     pub fn match_license(&self, id: &str) -> Option<License> {
-        self.match_licenses(id, None).get(0).cloned()
+        self.match_licenses(id, None).first().cloned()
     }
 
     /// Matches a license by ID fuzzily.
