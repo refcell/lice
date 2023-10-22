@@ -52,28 +52,16 @@ use anyhow::Result;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let license = lice::SPDX::license("MIT").await?;
+    let license = lice::get("mit").await?;
     assert_eq!(license.license_id, "MIT");
     Ok(())    
 }
 ```
 
-The [lice::SPDX](./src/spdx.rs) client also exposes wrapper methods
-around the [Licenses type](./src/types.rs). An example of "fuzzy"
-searching for a license is shown below.
-
-```rust
-use anyhow::Result;
-
-#[tokio::main]
-async fn main() -> Result<()> {
-    let license = lice::SPDX::fuzzy_find("MIT").await?;
-    let license = license.ok_or(anyhow::anyhow!("no license!"))?;
-    assert_eq!(license.license_id, "MIT");
-    Ok(())    
-}
-```
-
+Under the hood, the [get](https://docs.rs/lice/latest/lice/fn.get.html)
+function fetches licenses and fuzzy matches, using the first choice to
+query the license details, returning the merged [License](https://docs.rs/lice/latest/lice/types/struct.License.html) 
+and its details.
 
 ## Contributing
 

@@ -1,3 +1,4 @@
+use merge::Merge;
 use serde::Deserialize;
 
 /// Cross Reference.
@@ -36,20 +37,26 @@ pub struct CrossRef {
 /// - `standardLicenseTemplate`
 /// - `licenseTextHtml`
 /// - `crossRef`
-#[derive(Deserialize, PartialEq, Debug, Clone)]
+#[derive(Merge, Deserialize, PartialEq, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct License {
     /// The license name.
+    #[merge(skip)]
     pub name: String,
     /// The license ID.
+    #[merge(skip)]
     pub license_id: String,
     /// A list of URLs to other resources related to the license.
+    #[merge(skip)]
     pub see_also: Vec<String>,
     /// Whether or not the license is OSI approved.
+    #[merge(skip)]
     pub is_osi_approved: bool,
     /// Whether or not the license is FSF libre.
+    #[merge(skip)]
     pub is_fsf_libre: Option<bool>,
     /// Whether or not the license is deprecated.
+    #[merge(skip)]
     pub is_deprecated_license_id: bool,
 
     /// A reference to the license.
@@ -139,6 +146,73 @@ impl Licenses {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_merge_license_with_details() {
+        let mut license = License {
+            name: String::from("MIT License"),
+            license_id: String::from("MIT"),
+            see_also: vec![String::from("https://opensource.org/licenses/MIT")],
+            is_osi_approved: true,
+            is_fsf_libre: Some(true),
+            is_deprecated_license_id: false,
+            license_text: None,
+            standard_license_template: None,
+            license_text_html: None,
+            cross_ref: None,
+            reference: None,
+            details_url: None,
+            reference_number: None,
+        };
+        let details = License {
+            name: String::from("MIT License"),
+            license_id: String::from("MIT"),
+            see_also: vec![String::from("https://opensource.org/licenses/MIT")],
+            is_osi_approved: true,
+            is_fsf_libre: Some(true),
+            is_deprecated_license_id: false,
+            license_text: Some(String::from("...")),
+            standard_license_template: Some(String::from("...")),
+            license_text_html: Some(String::from("...")),
+            cross_ref: Some(vec![CrossRef {
+                r#match: String::from("N/A"),
+                url: String::from("https://opensource.org/licenses/MIT"),
+                is_valid: true,
+                is_live: false,
+                timestamp: String::from("2023-10-05T15:11:54Z"),
+                is_way_back_link: false,
+                order: 0,
+            }]),
+            reference: Some(String::from("https://spdx.org/licenses/MIT.html")),
+            details_url: Some(String::from("https://spdx.org/licenses/MIT.json")),
+            reference_number: Some(246),
+        };
+        license.merge(details);
+        let expected = License {
+            name: String::from("MIT License"),
+            license_id: String::from("MIT"),
+            see_also: vec![String::from("https://opensource.org/licenses/MIT")],
+            is_osi_approved: true,
+            is_fsf_libre: Some(true),
+            is_deprecated_license_id: false,
+            license_text: Some(String::from("...")),
+            standard_license_template: Some(String::from("...")),
+            license_text_html: Some(String::from("...")),
+            cross_ref: Some(vec![CrossRef {
+                r#match: String::from("N/A"),
+                url: String::from("https://opensource.org/licenses/MIT"),
+                is_valid: true,
+                is_live: false,
+                timestamp: String::from("2023-10-05T15:11:54Z"),
+                is_way_back_link: false,
+                order: 0,
+            }]),
+            reference: Some(String::from("https://spdx.org/licenses/MIT.html")),
+            details_url: Some(String::from("https://spdx.org/licenses/MIT.json")),
+            reference_number: Some(246),
+        };
+        assert_eq!(license, expected);
+    }
 
     #[test]
     fn test_mit_license_serde() {
