@@ -18,7 +18,7 @@
 [Docs]: https://img.shields.io/docsrs/lice.svg?color=319e8c&label=docs.rs
 
 
-**Dead simple, minimal SPDX License generator library written in Rust.** Lice is in https://github.com/refcell/lice/labels/beta.
+**Dead simple, minimal SPDX License generator library written in Rust.** Lice is in https://github.com/refcell/lice/labels/beta
 
 ![](./etc/banner.png)
 
