@@ -4,14 +4,14 @@
 [![License]][mit-license]
 [![Docs]][Docs-rs]
 [![Latest Version]][crates.io]
-[![rustc 1.31+]][Rust 1.31]
+[![rustc 1.65+]][Rust 1.65]
 
 [Build Status]: https://img.shields.io/github/actions/workflow/status/refcell/lice/ci.yml?branch=main
 [actions]: https://github.com/refcell/lice/actions?query=branch%3Amain
 [Latest Version]: https://img.shields.io/crates/v/lice.svg
 [crates.io]: https://crates.io/crates/lice
-[rustc 1.31+]: https://img.shields.io/badge/rustc_1.31+-lightgray.svg
-[Rust 1.31]: https://blog.rust-lang.org/2018/12/06/Rust-1.31-and-rust-2018.html
+[rustc 1.65+]: https://img.shields.io/badge/rustc_1.65+-lightgray.svg?label=msrv
+[Rust 1.65]: https://blog.rust-lang.org/2022/11/03/Rust-1.65.0.html
 [License]: https://img.shields.io/badge/license-MIT-7795AF.svg
 [mit-license]: https://github.com/refcell/lice/blob/main/LICENSE.md
 [Docs-rs]: https://docs.rs/lice/
