@@ -77,7 +77,7 @@ if no relevant issue already exists.
 ## Attribution
 
 Much of this work is based off of [lic][lic-repo], an spdx license
-generator binary that isn't extensible as a library. The adapted
+generator binary that can't be used as a library. The adapted
 [`lice`][crates.io] crate extends the SPDX "API" to
 provide more verbose license fetching methods. Big h/t to the
 creators of [lic][lic-repo] especially [SigureMo][sig-mo]
